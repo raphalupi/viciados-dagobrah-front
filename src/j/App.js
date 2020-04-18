@@ -1,28 +1,28 @@
-import React from "react";
+import React from 'react';
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
-import AppContent from "./AppContent";
-import AppSidebar from "./AppSidebar";
-import AppHeader from "./AppHeader";
+import AppContent from './AppContent';
+import AppSidebar from './AppSidebar';
+import AppHeader from './AppHeader';
 // import Footer from "./Footer";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex",
-    minHeight: "100vh"
+    display: 'flex',
+    minHeight: '100vh'
   },
   contentWrapper: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between", // so Footer remains on the bottom
+    flexDirection: 'column',
+    justifyContent: 'space-between', // so Footer remains on the bottom
     // Adjusts spacing from top based on toolbar height
     marginTop: 56,
-    [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
       marginTop: 46
     },
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       marginTop: 64
     }
   }

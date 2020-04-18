@@ -1,5 +1,5 @@
-import React from "react";
-import { Redirect } from "react-router-dom";
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import {
   Card,
@@ -9,59 +9,59 @@ import {
   TextField,
   Typography,
   Button
-} from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
-import { makeStyles } from "@material-ui/core/styles";
+} from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
+import { makeStyles } from '@material-ui/core/styles';
 
-import LocalStorageHelper from "../utils/LocalStorageHelper";
+import LocalStorageHelper from '../utils/LocalStorageHelper';
 import {
   ALLY_CODE_PLAYER,
   ALLY_CODE_OPPONENT
-} from "../utils/LocalStorageKeys";
+} from '../utils/LocalStorageKeys';
 
-import SetupProgressModal from "./SetupProgressModal";
+import SetupProgressModal from './SetupProgressModal';
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
-    alignSelf: "center",
+    alignSelf: 'center',
     maxWidth: 500
   },
   cardContent: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    flexDirection: "column"
+    flexDirection: 'column'
   },
   title: {
     marginBottom: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       marginBottom: theme.spacing(3)
     }
   },
   formLabel: {
     marginBottom: theme.spacing(1),
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       marginBottom: theme.spacing(2)
     },
-    textAlign: "center"
+    textAlign: 'center'
   },
   idsWarpper: {
-    width: "fit-content",
-    alignSelf: "center",
-    [theme.breakpoints.up("sm")]: {
-      flexDirection: "row"
+    width: 'fit-content',
+    alignSelf: 'center',
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row'
     }
   },
   versusIcon: {
-    alignSelf: "center",
+    alignSelf: 'center',
     margin: `${theme.spacing(1)}px 0`,
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up('sm')]: {
       margin: `0 ${theme.spacing(2)}px`
     }
   },
   submitButton: {
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: theme.spacing(2),
-    width: "fit-content"
+    width: 'fit-content'
   }
 }));
 
@@ -89,20 +89,20 @@ function SetupPage() {
   }
 
   function cleanupUserID(id) {
-    const _cleanId = (id || "")
-      .replace(/\D/g, "")
+    const _cleanId = (id || '')
+      .replace(/\D/g, '')
       .trim()
       .slice(0, 9);
     return _cleanId;
   }
 
   function handleSubmitClick() {
-    console.warn("handleSubmitClick");
+    console.warn('handleSubmitClick');
     setProgressModalOpen(true);
   }
 
   function handleProgressModalClose(error) {
-    console.warn("handleProgressModalClose");
+    console.warn('handleProgressModalClose');
     setProgressModalOpen(false);
     setGacDataFetched(true);
     if (error) {
@@ -115,7 +115,7 @@ function SetupPage() {
     return (
       <Redirect
         to={{
-          pathname: "/"
+          pathname: '/'
         }}
       />
     );

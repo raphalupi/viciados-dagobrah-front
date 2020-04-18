@@ -1,15 +1,15 @@
-import React from "react";
-import { render } from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 // import * as serviceWorker from "./serviceWorker";
 
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import colorGrey from "@material-ui/core/colors/grey";
-import colorTeal from "@material-ui/core/colors/teal";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import colorGrey from '@material-ui/core/colors/grey';
+import colorTeal from '@material-ui/core/colors/teal';
 
-import "./c/index.scss";
-import App from "./j/App";
+import './c/index.scss';
+import App from './j/App';
 
 const theme = createMuiTheme({
   breakpoints: {
@@ -23,10 +23,10 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: colorGrey["800"]
+      main: colorGrey['800']
     },
     secondary: {
-      main: colorTeal["500"]
+      main: colorTeal['500']
     }
   }
 });
@@ -40,7 +40,7 @@ render(
       </MuiThemeProvider>
     </Router>
   </React.Fragment>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
-import { Menu as MenuIcon } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up("md")]: {
-      display: "none"
+    [theme.breakpoints.up('md')]: {
+      display: 'none'
     }
   }
 }));

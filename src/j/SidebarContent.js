@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Link, useRouteMatch } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link, useRouteMatch } from 'react-router-dom';
 
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import BuildIcon from "@material-ui/icons/Build";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-// import InfoIcon from "@material-ui/icons/Info";
-// import WcIcon from "@material-ui/icons/Wc";
-// import WidgetsIcon from "@material-ui/icons/Widgets";
+import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import BuildIcon from '@material-ui/icons/Build';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+// import InfoIcon from '@material-ui/icons/Info';
+// import WcIcon from '@material-ui/icons/Wc';
+// import WidgetsIcon from '@material-ui/icons/Widgets';
 
 const useStyles = makeStyles(() => ({
   listIcon: {
@@ -20,28 +20,28 @@ const links = [
   {
     icon: <DashboardIcon />,
     isExactPath: true,
-    label: "Summary",
-    to: "/"
+    label: 'Summary',
+    to: '/'
   },
   {
     icon: <BuildIcon />,
-    label: "Setup",
-    to: "/setup"
+    label: 'Setup',
+    to: '/setup'
   }
   // {
   //   icon: <WcIcon />,
-  //   label: "Compare Collections",
-  //   to: "/compare-collections"
+  //   label: 'Compare Collections',
+  //   to: '/compare-collections'
   // },
   // {
   //   icon: <WidgetsIcon />,
-  //   label: "Compare Mods",
-  //   to: "/compare-mods"
+  //   label: 'Compare Mods',
+  //   to: '/compare-mods'
   // },
   // {
   //   icon: <InfoIcon />,
-  //   label: "About",
-  //   to: "/about"
+  //   label: 'About',
+  //   to: '/about'
   // }
 ];
 

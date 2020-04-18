@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Drawer, Hidden, IconButton } from "@material-ui/core";
-import { Close as CloseIcon } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
+import { Drawer, Hidden, IconButton } from '@material-ui/core';
+import { Close as CloseIcon } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 
-import SidebarContent from "./SidebarContent";
+import SidebarContent from './SidebarContent';
 
 const DRAWER_WIDTH = 200;
 
 const useStyles = makeStyles(theme => ({
   drawer: {
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up('md')]: {
       width: DRAWER_WIDTH,
       flexShrink: 0
     }
@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     width: DRAWER_WIDTH
   },
   closeMenuButton: {
-    marginRight: "auto",
+    marginRight: 'auto',
     marginLeft: 0
   }
 }));

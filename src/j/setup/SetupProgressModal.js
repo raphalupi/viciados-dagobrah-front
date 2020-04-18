@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   Dialog,
@@ -7,10 +7,12 @@ import {
   DialogTitle,
   IconButton,
   Typography
-} from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
-import CloseIcon from "@material-ui/icons/Close";
-import { makeStyles } from "@material-ui/core/styles";
+} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
+import { makeStyles } from '@material-ui/core/styles';
+
+import SWGOHAPIHelp from '../dataFetcher/SWGOHAPIHelp';
 
 const useStyles = makeStyles(theme => ({
   modalTitleWrapper: {
@@ -18,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2)
   },
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.grey[500]
@@ -33,6 +35,10 @@ function SetupProgressModal(props) {
     const { onClose } = props;
     onClose();
   };
+
+  if (open) {
+    SWGOHAPIHelp.test();
+  }
 
   return (
     <Dialog
@@ -54,8 +60,8 @@ function SetupProgressModal(props) {
       </DialogTitle>
       <DialogContent dividers>
         <Alert severity="info">
-          Please wait a bit. Fetching data for ally codes{" "}
-          <strong>{allyCodePlayer}</strong> and{" "}
+          Please wait a bit. Fetching data for ally codes{' '}
+          <strong>{allyCodePlayer}</strong> and{' '}
           <strong>{allyCodeOpponent}</strong>...
         </Alert>
       </DialogContent>

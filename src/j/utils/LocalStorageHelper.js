@@ -4,7 +4,7 @@ class LocalStorageHelper {
       this.localStorage = window.localStorage;
       this.isLocalStorageAvailable = this._checkIfLocalStorageAvailable();
       if (!this.isLocalStorageAvailable) {
-        console.error("Local Storage not available. App won't work properly!");
+        console.error('Local Storage not available. App won\'t work properly!');
       }
       LocalStorageHelper.instance = this;
     }
@@ -47,7 +47,7 @@ class LocalStorageHelper {
   set(key, value) {
     if (this.isLocalStorageAvailable) {
       let valueToStore = value;
-      if (typeof value !== "string") {
+      if (typeof value !== 'string') {
         valueToStore = JSON.stringify(value);
       }
       this.localStorage.setItem(key, valueToStore);
@@ -56,7 +56,7 @@ class LocalStorageHelper {
 
   _checkIfLocalStorageAvailable() {
     try {
-      const x = "__storage_test__";
+      const x = '__storage_test__';
       this.localStorage.setItem(x, x);
       this.localStorage.removeItem(x);
       return true;
@@ -69,9 +69,9 @@ class LocalStorageHelper {
           e.code === 1014 ||
           // test name field too, because code might not be present
           // everything except Firefox
-          e.name === "QuotaExceededError" ||
+          e.name === 'QuotaExceededError' ||
           // Firefox
-          e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
         // acknowledge QuotaExceededError only if there's something already stored
         (this.localStorage && this.localStorage.length !== 0)
       );
