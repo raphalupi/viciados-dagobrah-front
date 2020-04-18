@@ -1,3 +1,5 @@
+import APIRoutes from '../utils/APIRoutes';
+
 class SWGOHAPIHelp {
   constructor() {
     if (!SWGOHAPIHelp.instance) {
@@ -14,7 +16,7 @@ class SWGOHAPIHelp {
   }
 
   async test() {
-    await fetch('/api/test')
+    await fetch(APIRoutes.TEST)
       .then(r => console.log(r))
       .catch(e => console.error(e));
   }
