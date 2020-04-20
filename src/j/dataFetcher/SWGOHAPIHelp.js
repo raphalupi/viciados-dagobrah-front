@@ -1,28 +1,20 @@
 import APIRoutes from '../utils/APIRoutes';
 
-class SWGOHAPIHelp {
-  constructor() {
-    if (!SWGOHAPIHelp.instance) {
-      this.username = 'lalala';
-      this.password = '678365872365786238';
-      this.userID = '326847126781467283';
+const fetchPlayerData = (allyCode, onSuccess, onError) => {
+  console.log('fetchPlayerData', allyCode);
 
-      this.token = null;
+  const endpoint = `${APIRoutes.FETCH_PLAYER_DATA}/${allyCode}`;
 
-      SWGOHAPIHelp.instance = this;
-    }
+  fetch(endpoint)
+    .then(r => r.json())
+    .then(r => {
+      console.log(r);
+      onSuccess(r);
+    })
+    .catch(e => {
+      console.error(e);
+      onError(e);
+    });
+};
 
-    return SWGOHAPIHelp.instance;
-  }
-
-  async test() {
-    await fetch(APIRoutes.TEST)
-      .then(r => console.log(r))
-      .catch(e => console.error(e));
-  }
-}
-
-const instance = new SWGOHAPIHelp();
-Object.freeze(instance);
-
-export default instance;
+export default { fetchPlayerData };

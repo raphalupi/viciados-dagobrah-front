@@ -2,7 +2,7 @@ const devRoutePrefix = '';
 const prodRoutePrefix = 'https://ga-nalysis-api.herokuapp.com';
 
 const baseRoutes = {
-  TEST: '/api/test'
+  FETCH_PLAYER_DATA: '/api/fetchPlayer' // /:allyCode
 };
 
 function getRoutesWithEnvPrefix(env) {

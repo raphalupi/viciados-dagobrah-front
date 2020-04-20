@@ -36,8 +36,20 @@ function SetupProgressModal(props) {
     onClose();
   };
 
+  const handleOnPlayerDataFetchComplete = data => {
+    console.warn('handleOnPlayerDataFetchComplete', data);
+  };
+
+  const handleOnPlayerDataFetchError = e => {
+    console.error('handleOnPlayerDataFetchComplete', e);
+  };
+
   if (open) {
-    SWGOHAPIHelp.test();
+    SWGOHAPIHelp.fetchPlayerData(
+      allyCodePlayer,
+      handleOnPlayerDataFetchComplete,
+      handleOnPlayerDataFetchError
+    );
   }
 
   return (
@@ -45,13 +57,13 @@ function SetupProgressModal(props) {
       disableBackdropClick
       disableEscapeKeyDown
       fullWidth
-      maxWidth="sm"
+      maxWidth='sm'
       open={open}
     >
       <DialogTitle disableTypography className={classes.modalTitleWrapper}>
-        <Typography variant="h6">Fetching data from players</Typography>
+        <Typography variant='h6'>Fetching data from players</Typography>
         <IconButton
-          aria-label="close"
+          aria-label='close'
           className={classes.closeButton}
           onClick={handleModalClose}
         >
@@ -59,7 +71,7 @@ function SetupProgressModal(props) {
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Alert severity="info">
+        <Alert severity='info'>
           Please wait a bit. Fetching data for ally codes{' '}
           <strong>{allyCodePlayer}</strong> and{' '}
           <strong>{allyCodeOpponent}</strong>...
