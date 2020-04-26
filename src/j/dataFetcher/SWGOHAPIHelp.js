@@ -8,11 +8,11 @@ const fetchPlayerData = (allyCode, onSuccess, onError) => {
   fetch(endpoint)
     .then(r => r.json())
     .then(r => {
-      console.log(r);
+      console.log('fetchPlayerData - then', r);
       onSuccess(r);
     })
     .catch(e => {
-      console.error(e);
+      console.warn('fetchPlayerData - catch', e);
       onError(e);
     });
 };

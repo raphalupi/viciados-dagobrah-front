@@ -6,7 +6,6 @@ const baseRoutes = {
 };
 
 function getRoutesWithEnvPrefix(env) {
-  console.log('getRoutesWithEnvPrefix', env);
   let prefix = devRoutePrefix;
   if (env === 'production') {
     prefix = prodRoutePrefix;

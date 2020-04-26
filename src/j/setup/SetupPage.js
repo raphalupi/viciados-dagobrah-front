@@ -81,7 +81,8 @@ function SetupPage() {
   const [gacDataFetched, setGacDataFetched] = React.useState(false);
   const [hadDataFetchErrors, setHadDataFetchErrors] = React.useState(false);
 
-  const canSubmit = playerID.length === 9 && opponentID.length === 9;
+  const canSubmit =
+    playerID.length === 9 && opponentID.length === 9 && playerID !== opponentID;
 
   function handleOnChange(event, stateChanger) {
     const ID = cleanupUserID(event.target.value);
@@ -97,12 +98,10 @@ function SetupPage() {
   }
 
   function handleSubmitClick() {
-    console.warn('handleSubmitClick');
     setProgressModalOpen(true);
   }
 
   function handleProgressModalClose(error) {
-    console.warn('handleProgressModalClose');
     setProgressModalOpen(false);
     setGacDataFetched(true);
     if (error) {
@@ -126,11 +125,11 @@ function SetupPage() {
       <Card className={classes.wrapper}>
         <CardContent className={classes.cardContent}>
           <Typography
-            align="center"
+            align='center'
             className={classes.title}
-            component="h2"
+            component='h2'
             gutterBottom
-            variant="h5"
+            variant='h5'
           >
             Setup your GAC match!
           </Typography>
@@ -139,31 +138,31 @@ function SetupPage() {
           </FormLabel>
           <FormControl className={classes.idsWarpper}>
             <TextField
-              id="player-id-input"
-              label="Mine"
+              id='player-id-input'
+              label='Mine'
               onChange={e => handleOnChange(e, setPlayerID)}
-              placeholder="123456789"
+              placeholder='123456789'
               value={playerID}
-              variant="outlined"
+              variant='outlined'
             />
             <ClearIcon className={classes.versusIcon} />
             <TextField
-              id="opponent-id-input"
+              id='opponent-id-input'
               label="Opponent's"
               onChange={e => handleOnChange(e, setOpponentID)}
-              placeholder="123456789"
+              placeholder='123456789'
               value={opponentID}
-              variant="outlined"
+              variant='outlined'
             />
           </FormControl>
           <Button
             className={classes.submitButton}
-            color="secondary"
+            color='secondary'
             disabled={!canSubmit}
             onClick={handleSubmitClick}
-            size="large"
-            type="submit"
-            variant="contained"
+            size='large'
+            type='submit'
+            variant='contained'
           >
             Fetch data
           </Button>

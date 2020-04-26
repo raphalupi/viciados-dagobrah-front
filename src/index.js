@@ -31,6 +31,10 @@ const theme = createMuiTheme({
   }
 });
 
+if (process.env.NODE_ENV === 'development') {
+  console.log(theme);
+}
+
 render(
   <React.Fragment>
     <CssBaseline />

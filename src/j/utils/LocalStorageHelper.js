@@ -4,7 +4,7 @@ class LocalStorageHelper {
       this.localStorage = window.localStorage;
       this.isLocalStorageAvailable = this._checkIfLocalStorageAvailable();
       if (!this.isLocalStorageAvailable) {
-        console.error('Local Storage not available. App won\'t work properly!');
+        console.error("Local Storage not available. App won't work properly!");
       }
       LocalStorageHelper.instance = this;
     }

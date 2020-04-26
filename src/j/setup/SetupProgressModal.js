@@ -8,11 +8,10 @@ import {
   IconButton,
   Typography
 } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/core/styles';
 
-import SWGOHAPIHelp from '../dataFetcher/SWGOHAPIHelp';
+import SetupProgressStatus from './SetupProgressStatus';
 
 const useStyles = makeStyles(theme => ({
   modalTitleWrapper: {
@@ -36,32 +35,20 @@ function SetupProgressModal(props) {
     onClose();
   };
 
-  const handleOnPlayerDataFetchComplete = data => {
-    console.warn('handleOnPlayerDataFetchComplete', data);
+  const handleDataFetchComplete = () => {
+    handleModalClose();
   };
-
-  const handleOnPlayerDataFetchError = e => {
-    console.error('handleOnPlayerDataFetchComplete', e);
-  };
-
-  if (open) {
-    SWGOHAPIHelp.fetchPlayerData(
-      allyCodePlayer,
-      handleOnPlayerDataFetchComplete,
-      handleOnPlayerDataFetchError
-    );
-  }
 
   return (
     <Dialog
       disableBackdropClick
       disableEscapeKeyDown
       fullWidth
-      maxWidth='sm'
+      maxWidth='md'
       open={open}
     >
       <DialogTitle disableTypography className={classes.modalTitleWrapper}>
-        <Typography variant='h6'>Fetching data from players</Typography>
+        <Typography variant='h6'>Fetching data...</Typography>
         <IconButton
           aria-label='close'
           className={classes.closeButton}
@@ -71,11 +58,11 @@ function SetupProgressModal(props) {
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Alert severity='info'>
-          Please wait a bit. Fetching data for ally codes{' '}
-          <strong>{allyCodePlayer}</strong> and{' '}
-          <strong>{allyCodeOpponent}</strong>...
-        </Alert>
+        <SetupProgressStatus
+          allyCodePlayer={allyCodePlayer}
+          allyCodeOpponent={allyCodeOpponent}
+          onFinish={handleDataFetchComplete}
+        />
       </DialogContent>
     </Dialog>
   );

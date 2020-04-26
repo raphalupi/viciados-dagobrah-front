@@ -1,2 +1,6 @@
-export const ALLY_CODE_PLAYER = 'ally_code_player';
-export const ALLY_CODE_OPPONENT = 'ally_code_opponent';
+export const ALLY_CODE_PLAYER = 'acp';
+export const ALLY_CODE_OPPONENT = 'aco';
+export const API_PLAYER_DATA = 'apd';
+export const API_OPPONENT_DATA = 'aod';
+export const API_PLAYER_DATA_LAST_FETCH_TS = 'apdlfts';
+export const API_OPPONENT_DATA_LAST_FETCH_TS = 'aodlfts';
