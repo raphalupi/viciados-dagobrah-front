@@ -9,6 +9,7 @@ import {
   Warning as WarningIcon
 } from '@material-ui/icons';
 import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SWGOHAPIHelp from '../dataFetcher/SWGOHAPIHelp';
@@ -44,8 +45,9 @@ const useStyles = makeStyles(theme => ({
 const DATA_FETCH_STATUS_ERROR = 'ERROR';
 const DATA_FETCH_STATUS_IGNORED = 'IGNORED';
 const DATA_FETCH_STATUS_SUCCESS = 'SUCCESS';
-const REQUEST_THROTTLE_HOURS = 2; // prevents a new request within X hours
-const SELF_CLOSE_TIMEOUT_MS = 5000;
+const REQUEST_THROTTLE_MINUTES = 30; // prevents a new request from a different ally code within X minutes
+const REQUEST_THROTTLE_HOURS = 2; // prevents a new request for the same ally code within X hours
+const SELF_CLOSE_TIMEOUT_MS = 3000;
 
 function SetupProgressStatus(props) {
   let selfCloseModalTimeout = null;
@@ -87,27 +89,8 @@ function SetupProgressStatus(props) {
 
   // Setup and Teardown
   useEffect(() => {
-    if (canFetchPlayerData()) {
-      fetchPlayerData();
-      setPlayerHasStartedLoadingData(true);
-    } else {
-      setPlayerDataStatus(DATA_FETCH_STATUS_IGNORED);
-      setPlayerHasFinishedLoadingData(true);
-      setPlayerDataWarningMessage(
-        'Requested less than 2 hours ago. Using stored data instead.'
-      );
-    }
-
-    if (canFetchOpponentData()) {
-      fetchOpponentData();
-      setOpponentHasStartedLoadingData(true);
-    } else {
-      setOpponentDataStatus(DATA_FETCH_STATUS_IGNORED);
-      setOpponentHasFinishedLoadingData(true);
-      setOpponentDataWarningMessage(
-        'Requested less than 2 hours ago. Using stored data instead.'
-      );
-    }
+    if (canFetchPlayerData()) fetchPlayerData();
+    if (canFetchOpponentData()) fetchOpponentData();
 
     return () => {
       if (selfCloseModalTimeout !== null) {
@@ -117,32 +100,95 @@ function SetupProgressStatus(props) {
     };
   }, []);
 
-  const requestRanShortlyBefore = key => {
+  // Checks if the time stored in 'key' happened more than 'amount' 'type'.
+  // E.g.: type = 'minutes', amount = '30' will return true if stored timestamp is
+  // over 30 minutes ago
+  const isCurrentTimeGreaterThanStored = (key, type, amount) => {
     const storedLastFetchTime = LocalStorageHelper.get(key);
     const lastFetchTime = storedLastFetchTime
       ? moment(storedLastFetchTime)
       : null;
 
-    if (lastFetchTime === null) return false;
+    if (lastFetchTime === null) return true;
 
-    return (
-      Math.abs(lastFetchTime.diff(moment(), 'hours', true)) <=
-      REQUEST_THROTTLE_HOURS
-    );
+    return Math.abs(lastFetchTime.diff(moment(), type, true)) >= amount;
   };
 
   const canFetchPlayerData = () => {
-    return (
-      !requestRanShortlyBefore(API_PLAYER_DATA_LAST_FETCH_TS) &&
-      !playerHasStartedLoadingData
+    return canFetchData(
+      ALLY_CODE_PLAYER,
+      API_PLAYER_DATA_LAST_FETCH_TS,
+      props.allyCodePlayer,
+      playerHasStartedLoadingData,
+      setPlayerHasStartedLoadingData,
+      setPlayerDataStatus,
+      setPlayerHasFinishedLoadingData,
+      setPlayerDataWarningMessage
     );
   };
 
   const canFetchOpponentData = () => {
-    return (
-      !requestRanShortlyBefore(API_OPPONENT_DATA_LAST_FETCH_TS) &&
-      !opponentHasStartedLoadingData
+    return canFetchData(
+      ALLY_CODE_OPPONENT,
+      API_OPPONENT_DATA_LAST_FETCH_TS,
+      props.allyCodeOpponent,
+      opponentHasStartedLoadingData,
+      setOpponentHasStartedLoadingData,
+      setOpponentDataStatus,
+      setOpponentHasFinishedLoadingData,
+      setOpponentDataWarningMessage
     );
+  };
+
+  const canFetchData = (
+    allyCodeStoreKey,
+    lastFetchTSStoreKey,
+    allyCode,
+    hasStartedLoadingData,
+    hasStartedLoadingDataSetter,
+    dataStatusSetter,
+    hasFinishedLoadingDataSetter,
+    dataWarningMessageSetter
+  ) => {
+    let canFetch = false;
+    if (!hasStartedLoadingData) {
+      hasStartedLoadingDataSetter(true);
+
+      const storedAllyCode = LocalStorageHelper.get(allyCodeStoreKey);
+      if (storedAllyCode !== allyCode) {
+        // Changed ally codes can refresh every 30 minutes
+        canFetch = isCurrentTimeGreaterThanStored(
+          lastFetchTSStoreKey,
+          'minutes',
+          REQUEST_THROTTLE_MINUTES
+        );
+
+        if (!canFetch) {
+          dataStatusSetter(DATA_FETCH_STATUS_IGNORED);
+          hasFinishedLoadingDataSetter(true);
+          dataWarningMessageSetter(
+            `Last request for other ally code (${storedAllyCode}) was a few minutes ago. Try again later`
+          );
+        }
+      } else {
+        // Same ally codes can refresh every 2 hours
+        canFetch = isCurrentTimeGreaterThanStored(
+          lastFetchTSStoreKey,
+          'hours',
+          REQUEST_THROTTLE_HOURS
+        );
+
+        if (!canFetch) {
+          dataStatusSetter(DATA_FETCH_STATUS_IGNORED);
+          hasFinishedLoadingDataSetter(true);
+          dataWarningMessageSetter(
+            'Last request for this ally code was a few minutes. Try again later.'
+          );
+        }
+      }
+
+      return canFetch;
+    }
   };
 
   const fetchPlayerData = () => {
@@ -172,19 +218,7 @@ function SetupProgressStatus(props) {
     setPlayerHasFinishedLoadingData(true);
     setPlayerIsLoadingData(false);
 
-    LocalStorageHelper.set(ALLY_CODE_PLAYER, props.allyCodePlayer);
-    if (Array.isArray(data) && data.length >= 1) {
-      LocalStorageHelper.set(API_PLAYER_DATA, JSON.stringify(data[0], null, 0));
-      LocalStorageHelper.set(API_PLAYER_DATA_LAST_FETCH_TS, moment().format());
-    }
-  };
-
-  const handlePlayerDataError = error => {
-    console.error('handlePlayerDataError', error);
-    setPlayerDataStatus(DATA_FETCH_STATUS_ERROR);
-    setPlayerHasFinishedLoadingData(true);
-    setPlayerIsLoadingData(false);
-    setPlayerDataErrorMessage('TEST ERROR');
+    storeDataState(props.allyCodePlayer, data);
   };
 
   const handleOpponentDataSuccess = data => {
@@ -192,27 +226,38 @@ function SetupProgressStatus(props) {
     setOpponentHasFinishedLoadingData(true);
     setOpponentIsLoadingData(false);
 
-    LocalStorageHelper.set(ALLY_CODE_OPPONENT, props.allyCodeOpponent);
+    storeDataState(props.allyCodeOpponent, data, true);
+  };
+
+  const storeDataState = (allyCode, data, isOpponent) => {
+    const allyCodeKey = isOpponent ? ALLY_CODE_OPPONENT : ALLY_CODE_PLAYER;
+    const apiDataKey = isOpponent ? API_OPPONENT_DATA : API_PLAYER_DATA;
+    const apiDataLastFetchTSKey = isOpponent
+      ? API_OPPONENT_DATA_LAST_FETCH_TS
+      : API_PLAYER_DATA_LAST_FETCH_TS;
+
+    LocalStorageHelper.set(allyCodeKey, allyCode);
     if (Array.isArray(data) && data.length >= 1) {
-      LocalStorageHelper.set(
-        API_OPPONENT_DATA,
-        JSON.stringify(data[0], null, 0)
-      );
-      LocalStorageHelper.set(
-        API_OPPONENT_DATA_LAST_FETCH_TS,
-        moment().format()
-      );
+      LocalStorageHelper.set(apiDataKey, JSON.stringify(data[0], null, 0));
+      LocalStorageHelper.set(apiDataLastFetchTSKey, moment().format());
     }
   };
 
-  const handleOpponentDataError = error => {
-    console.error('handleOpponentDataError', error);
+  const handlePlayerDataError = e => {
+    setPlayerDataStatus(DATA_FETCH_STATUS_ERROR);
+    setPlayerHasFinishedLoadingData(true);
+    setPlayerIsLoadingData(false);
+    setPlayerDataErrorMessage(e.description);
+  };
+
+  const handleOpponentDataError = e => {
     setOpponentDataStatus(DATA_FETCH_STATUS_ERROR);
     setOpponentHasFinishedLoadingData(true);
     setOpponentIsLoadingData(false);
-    setOpponentDataErrorMessage('TEST ERROR');
+    setOpponentDataErrorMessage(e.description);
   };
 
+  // Shows the success message when statuses are either success or alert
   const shouldShowSuccessAlert = () => {
     const shouldShow =
       playerHasFinishedLoadingData &&
@@ -222,10 +267,15 @@ function SetupProgressStatus(props) {
       (opponentDataStatus === DATA_FETCH_STATUS_SUCCESS ||
         opponentDataStatus === DATA_FETCH_STATUS_IGNORED);
 
+    const hasIgnoreds =
+      playerDataStatus === DATA_FETCH_STATUS_IGNORED ||
+      opponentDataStatus === DATA_FETCH_STATUS_IGNORED;
+
+    // If there's an warning, wait a bit longed before closing the modal
     if (shouldShow && selfCloseModalTimeout === null) {
       selfCloseModalTimeout = setTimeout(() => {
         props.onFinish();
-      }, SELF_CLOSE_TIMEOUT_MS);
+      }, SELF_CLOSE_TIMEOUT_MS * (hasIgnoreds ? 3 : 1));
     }
 
     return shouldShow;
@@ -240,13 +290,17 @@ function SetupProgressStatus(props) {
     );
   };
 
-  const getPlayerDataLoadingIcon = () => {
-    if (playerIsLoadingData) {
+  const getDataLoadingIcon = (
+    isLoadingData,
+    hasFinishedLoadingData,
+    dataStatus
+  ) => {
+    if (isLoadingData) {
       return <CircularProgress size={14} />;
-    } else if (playerHasFinishedLoadingData) {
-      if (playerDataStatus === DATA_FETCH_STATUS_SUCCESS) {
+    } else if (hasFinishedLoadingData) {
+      if (dataStatus === DATA_FETCH_STATUS_SUCCESS) {
         return <CheckCircleIcon color='secondary' fontSize='small' />;
-      } else if (playerDataStatus === DATA_FETCH_STATUS_IGNORED) {
+      } else if (dataStatus === DATA_FETCH_STATUS_IGNORED) {
         return (
           <WarningIcon
             className={classes.alertIcon}
@@ -260,43 +314,40 @@ function SetupProgressStatus(props) {
     }
   };
 
+  const getPlayerDataLoadingIcon = () => {
+    return getDataLoadingIcon(
+      playerIsLoadingData,
+      playerHasFinishedLoadingData,
+      playerDataStatus
+    );
+  };
+
   const getOpponentDataLoadingIcon = () => {
-    if (opponentIsLoadingData) {
-      return <CircularProgress size={14} />;
-    } else if (opponentHasFinishedLoadingData) {
-      if (opponentDataStatus === DATA_FETCH_STATUS_SUCCESS) {
-        return <CheckCircleIcon color='secondary' fontSize='small' />;
-      } else if (opponentDataStatus === DATA_FETCH_STATUS_IGNORED) {
-        return (
-          <WarningIcon
-            className={classes.alertIcon}
-            color='primary'
-            fontSize='small'
-          />
-        );
-      } else {
-        return <ErrorIcon color='error' fontSize='small' />;
-      }
-    }
+    return getDataLoadingIcon(
+      opponentIsLoadingData,
+      opponentHasFinishedLoadingData,
+      opponentDataStatus
+    );
   };
 
   return (
     <div className='wrapper'>
       <Grid container spacing={2}>
         {shouldShowFailureAlert() && (
-          <Alert severity='error'>
-            Error fetching player data.
-            <br />
-            See errors below to identify the cause, close this modal and try
-            again later.
-          </Alert>
+          <Grid item xs={12}>
+            <Alert severity='error'>
+              <AlertTitle>Error fetching player data.</AlertTitle>
+              See errors below. Close this modal and try again later.
+            </Alert>
+          </Grid>
         )}
         {shouldShowSuccessAlert() && (
-          <Alert severity='success'>
-            Player data fetched successfully!
-            <br />
-            Redirecting to the dashboard...
-          </Alert>
+          <Grid item xs={12}>
+            <Alert severity='success'>
+              <AlertTitle>Player data fetched successfully!</AlertTitle>
+              Redirecting to the dashboard...
+            </Alert>
+          </Grid>
         )}
 
         <Grid item sm={6} xs={12}>
@@ -312,12 +363,12 @@ function SetupProgressStatus(props) {
               </div>
               {playerDataWarningMessage ? (
                 <div className={classes.taskStatusWarningMessage}>
-                  {playerDataWarningMessage}
+                  Warning: {playerDataWarningMessage}
                 </div>
               ) : null}
               {playerDataErrorMessage ? (
                 <div className={classes.taskStatusErrorMessage}>
-                  {playerDataErrorMessage}
+                  Error: {playerDataErrorMessage}
                 </div>
               ) : null}
             </div>
@@ -336,12 +387,12 @@ function SetupProgressStatus(props) {
               </div>
               {opponentDataWarningMessage ? (
                 <div className={classes.taskStatusWarningMessage}>
-                  {opponentDataWarningMessage}
+                  Warning: {opponentDataWarningMessage}
                 </div>
               ) : null}
               {opponentDataErrorMessage ? (
                 <div className={classes.taskStatusErrorMessage}>
-                  {opponentDataErrorMessage}
+                  Error: {opponentDataErrorMessage}
                 </div>
               ) : null}
             </div>

@@ -38,10 +38,7 @@ const useStyles = makeStyles(theme => ({
     }
   },
   formLabel: {
-    marginBottom: theme.spacing(1),
-    [theme.breakpoints.up('sm')]: {
-      marginBottom: theme.spacing(2)
-    },
+    marginBottom: theme.spacing(3),
     textAlign: 'center'
   },
   idsWarpper: {

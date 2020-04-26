@@ -1,19 +1,23 @@
 import APIRoutes from '../utils/APIRoutes';
 
 const fetchPlayerData = (allyCode, onSuccess, onError) => {
-  console.log('fetchPlayerData', allyCode);
-
   const endpoint = `${APIRoutes.FETCH_PLAYER_DATA}/${allyCode}`;
 
   fetch(endpoint)
-    .then(r => r.json())
     .then(r => {
-      console.log('fetchPlayerData - then', r);
-      onSuccess(r);
+      if (!r.ok) throw r;
+      return r.json();
     })
+    .then(r => onSuccess(r))
     .catch(e => {
-      console.warn('fetchPlayerData - catch', e);
-      onError(e);
+      if (typeof e.json === 'function') {
+        e.json().then(errorData => {
+          onError(errorData);
+        });
+        return;
+      }
+
+      console.error(e);
     });
 };
 
