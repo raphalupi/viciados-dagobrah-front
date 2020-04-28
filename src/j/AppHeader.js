@@ -40,7 +40,7 @@ function AppHeader(props) {
         >
           <MenuIcon />
         </IconButton>
-        <img className={classes.logoImg} src={logoImage} />
+        <img alt='logo' className={classes.logoImg} src={logoImage} />
         <Typography variant='h6' noWrap>
           GA-nalysis
         </Typography>
