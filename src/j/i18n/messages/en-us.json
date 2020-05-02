@@ -1,0 +1,11 @@
+{
+  "setup": {
+    "form": {
+      "header": "Setup your GAC match!",
+      "label": "Enter the ally codes",
+      "inputLabelMine": "Mine",
+      "inputLabelOpponent": "Opponent's",
+      "cta": "Fetch Data"
+    }
+  }
+}

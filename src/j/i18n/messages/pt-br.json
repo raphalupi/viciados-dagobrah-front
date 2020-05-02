@@ -1,0 +1,11 @@
+{
+  "setup": {
+    "form": {
+      "header": "Configure sua partida da GA!",
+      "label": "Insira os códigos de aliado",
+      "inputLabelMine": "Meu",
+      "inputLabelOpponent": "Oponente",
+      "cta": "Buscar Dados"
+    }
+  }
+}

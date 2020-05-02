@@ -4,3 +4,4 @@ export const API_PLAYER_DATA = 'apd';
 export const API_OPPONENT_DATA = 'aod';
 export const API_PLAYER_DATA_LAST_FETCH_TS = 'apdlfts';
 export const API_OPPONENT_DATA_LAST_FETCH_TS = 'aodlfts';
+export const PREFERED_LANG_CODE = 'l';

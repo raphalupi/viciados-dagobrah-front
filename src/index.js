@@ -9,13 +9,14 @@ import colorGrey from '@material-ui/core/colors/grey';
 import colorTeal from '@material-ui/core/colors/teal';
 
 import './c/index.scss';
+import './j/i18n';
 import App from './j/App';
 
 const theme = createMuiTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 425,
+      sm: 426,
       md: 769,
       lg: 1025,
       xl: 1300
@@ -32,6 +33,7 @@ const theme = createMuiTheme({
 });
 
 if (process.env.NODE_ENV === 'development') {
+  // eslint-disable-next-line
   console.log(theme);
 }
 

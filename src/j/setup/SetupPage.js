@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import {
   Card,
@@ -64,6 +65,7 @@ const useStyles = makeStyles(theme => ({
 
 function SetupPage() {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const storedPlayerID = cleanupUserID(
     LocalStorageHelper.get(ALLY_CODE_PLAYER)
@@ -128,15 +130,15 @@ function SetupPage() {
             gutterBottom
             variant='h5'
           >
-            Setup your GAC match!
+            {t('setup.form.header')}
           </Typography>
           <FormLabel className={classes.formLabel}>
-            Enter the ally codes
+            {t('setup.form.label')}
           </FormLabel>
           <FormControl className={classes.idsWarpper}>
             <TextField
               id='player-id-input'
-              label='Mine'
+              label={t('setup.form.inputLabelMine')}
               onChange={e => handleOnChange(e, setPlayerID)}
               placeholder='123456789'
               value={playerID}
@@ -145,7 +147,7 @@ function SetupPage() {
             <ClearIcon className={classes.versusIcon} />
             <TextField
               id='opponent-id-input'
-              label="Opponent's"
+              label={t('setup.form.inputLabelOpponent')}
               onChange={e => handleOnChange(e, setOpponentID)}
               placeholder='123456789'
               value={opponentID}
@@ -161,7 +163,7 @@ function SetupPage() {
             type='submit'
             variant='contained'
           >
-            Fetch data
+            {t('setup.form.cta')}
           </Button>
         </CardContent>
       </Card>

@@ -4,6 +4,7 @@ class LocalStorageHelper {
       this.localStorage = window.localStorage;
       this.isLocalStorageAvailable = this._checkIfLocalStorageAvailable();
       if (!this.isLocalStorageAvailable) {
+        // eslint-disable-next-line
         console.error("Local Storage not available. App won't work properly!");
       }
       LocalStorageHelper.instance = this;

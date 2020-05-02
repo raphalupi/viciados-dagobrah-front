@@ -16,8 +16,6 @@ const fetchPlayerData = (allyCode, onSuccess, onError) => {
         });
         return;
       }
-
-      console.error(e);
     });
 };
 
