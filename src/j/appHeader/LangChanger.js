@@ -1,7 +1,13 @@
 import React, { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+  Typography
+} from '@material-ui/core';
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
   Translate as TranslateIcon
@@ -24,8 +30,13 @@ const languages = [
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
-    color: '#fff',
-    justifySelf: 'flex-end'
+    color: theme.palette.common.white,
+    borderRadius: 5,
+    justifySelf: 'flex-end',
+    padding: '6px 8px',
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark
+    }
   },
   icon: {
     display: 'inline-block',
@@ -53,7 +64,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function LangChanger() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const classes = useStyles();
 
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -81,16 +92,18 @@ function LangChanger() {
 
   return (
     <Fragment>
-      <IconButton
-        aria-controls='simple-menu'
-        aria-haspopup='true'
-        className={classes.wrapper}
-        onClick={handleLangMenuOpen}
-      >
-        <TranslateIcon className={classes.icon} />
-        <Typography className={classes.text}>{i18n.language}</Typography>
-        <KeyboardArrowDownIcon className={classes.chevronDown} />
-      </IconButton>
+      <Tooltip title={t('nav.langChanger.tooltip')}>
+        <IconButton
+          aria-controls='simple-menu'
+          aria-haspopup='true'
+          className={classes.wrapper}
+          onClick={handleLangMenuOpen}
+        >
+          <TranslateIcon className={classes.icon} />
+          <Typography className={classes.text}>{i18n.language}</Typography>
+          <KeyboardArrowDownIcon className={classes.chevronDown} />
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id='simple-menu'

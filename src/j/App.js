@@ -3,8 +3,8 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import AppContent from './AppContent';
-import AppSidebar from './AppSidebar';
-import AppHeader from './AppHeader';
+import AppSidebar from './appSidebar/AppSidebar';
+import AppHeader from './appHeader/AppHeader';
 // import Footer from "./Footer";
 
 const useStyles = makeStyles(theme => ({

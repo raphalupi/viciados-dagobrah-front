@@ -28,17 +28,14 @@ export default function AppContent() {
 
   return (
     <div className={classes.wrapper}>
-      <Container className={classes.container} maxWidth="md">
+      <Container className={classes.container} maxWidth='md'>
         <Switch>
-          <Route exact path="/">
+          <Route exact path='/'>
             Inside /
           </Route>
-          <Route path="/setup">
+          <Route path='/setup'>
             <SetupPage />
           </Route>
-          {/* <Route path="/about">
-            <AboutPage />
-          </Route> */}
         </Switch>
       </Container>
     </div>

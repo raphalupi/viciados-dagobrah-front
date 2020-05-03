@@ -1,4 +1,15 @@
 {
+  "nav": {
+    "langChanger": {
+      "tooltip": "Change language"
+    }
+  },
+  "sidebar": {
+    "links": {
+      "dashboard": "Dashboard",
+      "setup": "Setup"
+    }
+  },
   "setup": {
     "form": {
       "header": "Setup your GAC match!",

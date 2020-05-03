@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, IconButton, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, IconButton, Toolbar } from '@material-ui/core';
 import { Menu as MenuIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 
-import logoImage from '../i/logo192.png';
-import LangChanger from './i18n/LangChanger';
+import AppLogo from './AppLogo';
+import LangChanger from './LangChanger';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -41,10 +41,7 @@ function AppHeader(props) {
         >
           <MenuIcon />
         </IconButton>
-        <img alt='logo' className={classes.logoImg} src={logoImage} />
-        <Typography className={classes.title} noWrap variant='h6'>
-          GA-nalysis
-        </Typography>
+        <AppLogo />
         <LangChanger />
       </Toolbar>
     </AppBar>

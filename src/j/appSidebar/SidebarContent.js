@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, useRouteMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import BuildIcon from '@material-ui/icons/Build';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-// import InfoIcon from '@material-ui/icons/Info';
-// import WcIcon from '@material-ui/icons/Wc';
-// import WidgetsIcon from '@material-ui/icons/Widgets';
+import {
+  Build as BuildIcon,
+  Dashboard as DashboardIcon
+} from '@material-ui/icons';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
+  listItem: {
+    '&.Mui-selected .MuiListItemIcon-root': {
+      color: theme.palette.secondary.main
+    }
+  },
   listIcon: {
     minWidth: 40
   }
@@ -20,29 +25,14 @@ const links = [
   {
     icon: <DashboardIcon />,
     isExactPath: true,
-    label: 'Summary',
+    i18nLabelKey: 'sidebar.links.dashboard',
     to: '/'
   },
   {
     icon: <BuildIcon />,
-    label: 'Setup',
+    i18nLabelKey: 'sidebar.links.setup',
     to: '/setup'
   }
-  // {
-  //   icon: <WcIcon />,
-  //   label: 'Compare Collections',
-  //   to: '/compare-collections'
-  // },
-  // {
-  //   icon: <WidgetsIcon />,
-  //   label: 'Compare Mods',
-  //   to: '/compare-mods'
-  // },
-  // {
-  //   icon: <InfoIcon />,
-  //   label: 'About',
-  //   to: '/about'
-  // }
 ];
 
 function SidebarLinkListItem(props) {
@@ -65,6 +55,7 @@ function SidebarLinkListItem(props) {
   return (
     <ListItem
       button
+      className={classes.listItem}
       component={CustomLink}
       onClick={onLinkClick}
       selected={!!match}
@@ -87,11 +78,17 @@ SidebarLinkListItem.propTypes = {
 
 function SidebarContent(props) {
   const { onLinkClick } = props;
+  const { t } = useTranslation();
+
+  const translatedLinks = links.map(l => {
+    l.label = t(l.i18nLabelKey);
+    return l;
+  });
 
   return (
     <div>
       <List>
-        {links.map(linkData => (
+        {translatedLinks.map(linkData => (
           <SidebarLinkListItem
             key={linkData.label}
             linkData={linkData}

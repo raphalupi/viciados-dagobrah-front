@@ -1,4 +1,15 @@
 {
+  "nav": {
+    "langChanger": {
+      "tooltip": "Alterar idioma"
+    }
+  },
+  "sidebar": {
+    "links": {
+      "dashboard": "Painel",
+      "setup": "Configurar"
+    }
+  },
   "setup": {
     "form": {
       "header": "Configure sua partida da GA!",
