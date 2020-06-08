@@ -11,6 +11,7 @@ import {
 
 import SidebarLinkListItem from './SidebarLinkListItem';
 
+// the 'label' field will be added here after being translated
 const links = [
   {
     icon: <DashboardIcon />,
